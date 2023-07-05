@@ -2,7 +2,7 @@ const admin = require('../model/adminModel')
 const users = require('../model/useModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-
+const banner = require('../model/bannerModel')
 const login = async(req,res)=>{
     const {email,password} = req.body
     try {
@@ -31,12 +31,30 @@ const login = async(req,res)=>{
 const bannerUpload = async(req,res)=>{
     try {
         const {title,description} = req.body
-        
+        console.log(title,description);
+        const newBanner = new banner({
+            title,
+            description,
+            image:req.file.filename
+        })
+        const  bannerData = await newBanner.save()
+        if(bannerData) res.status(201).json({status:true,message:"successfully created"})
+
     } catch (error) {
         console.log(error.message);
     }
 }
 
+const banners = async(req,res)=>{
+    try {
+        const bannerCollection = await banner.find({})
+        res.json({status : true,banners:bannerCollection})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 module.exports = {
-    login
+    login,
+    bannerUpload,
+    banners
 }

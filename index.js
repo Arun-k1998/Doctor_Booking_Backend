@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors    = require('cors')
 const mongoose = require('mongoose')
-
+const path = require('path')
 const app = express()
 mongoose.connect(process.env.MONGOCONNECT, {
     useNewUrlParser: true,
@@ -17,6 +17,7 @@ mongoose.connect(process.env.MONGOCONNECT, {
  
   
 app.use(express.json())
+app.use(express.static(path.join(__dirname,'public')))
 app.use(cors())
 const userRoute = require('./routes/userRoute')
 const adminRoute = require('./routes/adminRoute')
