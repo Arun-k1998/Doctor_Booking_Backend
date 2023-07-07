@@ -11,6 +11,10 @@ const bannerSchema = mongoose.Schema({
     },
     description:{
         type:String
+    },
+    is_delete:{
+        type:Boolean,
+        default:false
     }
 },{timeStamps:true})
 

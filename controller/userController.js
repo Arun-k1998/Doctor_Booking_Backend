@@ -3,8 +3,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require('crypto')
 //Schema
 const users = require("../model/useModel");
-const token = require("../model/tokenModel")
-const sendEmail = require("../utils/sendEmail")
+const banners = require('../model/bannerModel')
 // const admin = require('../model/adminModel')
 
 
@@ -15,6 +14,18 @@ const client = require('twilio')(TWILIO_ACCOUNT_SID,TWILIO_AUTH_TOKEN,{lazyLoadi
 async function hash(value) {
   const hashData = await bcrypt.hash(value, 10);
   return hashData;
+}
+
+const home = async(req,res)=>{
+  try {
+    const bannerData = await banners.find({is_delete:false})
+    res.json({
+      banners:bannerData,
+      status:true
+    })
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 const signup = async (req, res) => {
@@ -150,11 +161,12 @@ const login = async(req,res)=>{
             if(!user.is_Blocked){
                 const comparedPassword = bcrypt.compare(password,user.password)
                 if(comparedPassword){
-                  const token = await jwt.sign({id:user._id},'jsonwebSecretKey',{expiresIn:'2d'})
+                  const token = await jwt.sign({id:user._id},process.env.JSON_SECRET_KEY,{expiresIn:'2d'})
                  
                     res.json({
                         token,
-                        message:'Success'
+                        message:'Success',
+                        user:user
                     })
                 }else{
                     res.json({message:"Password didn't match"})
@@ -174,9 +186,21 @@ const login = async(req,res)=>{
 }
 
 
+
+const tokenVerification = async(req,res)=>{
+  try {
+    
+    res.json({status:true,user:req.user})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
   signup,
   login,
   otpVerification,
-  resendOTP
+  resendOTP,
+  tokenVerification,
+  home
 };
