@@ -39,20 +39,7 @@ const signup = async (req, res) => {
         phoneNumber: newUser.phoneNumber,
       });
       if (!userInPhoneNumber) {
-        // const hashPassword = await hash(newUser.password);
-
-        // newUser.password = hashPassword;
-        // const userData = new users(newUser);
-        // await userData.save();
-        
-          
-          // const Token = new token({
-          //   userId:userData._id,
-          //   token:crypto.randomBytes(32).toString('hex')
-          // }).save()
-
-          // const url = `${process.env.BASE_URL}/user/${userData._id}/verify/${Token.token}`
-          // await sendEmail(userData.email,'Verify email',url)
+       
           console.log(1);
           req.session.user = req.body
           console.log(req.session.user);
@@ -184,7 +171,6 @@ const login = async(req,res)=>{
         res.json({message:error.message})
     }
 }
-
 
 
 const tokenVerification = async(req,res)=>{

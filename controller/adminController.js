@@ -47,14 +47,38 @@ const bannerUpload = async(req,res)=>{
 
 const banners = async(req,res)=>{
     try {
-        const bannerCollection = await banner.find({})
+        const bannerCollection = await banner.find({is_delete:false})
         res.json({status : true,banners:bannerCollection})
     } catch (error) {
         console.log(error.message);
     }
 }
+
+const deleteBanner = async(req,res)=>{
+    try {
+        console.log(req.body.id);
+        const bannerData = await banner.findByIdAndUpdate(req.body.id,{is_delete:true})
+        if(bannerData){
+            res.json({
+                status:true,
+                message:'Successfully deleted'
+            })
+        }
+        
+    } catch (error) {
+        
+        console.log(error.message);
+        res.json({
+            status:false,
+            message:"Can't find the data"
+        })
+    } 
+}
+
+
 module.exports = {
     login,
     bannerUpload,
-    banners
+    banners,
+    deleteBanner
 }

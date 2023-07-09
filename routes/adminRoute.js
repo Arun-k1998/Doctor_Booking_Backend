@@ -32,5 +32,6 @@ const adminController = require('../controller/adminController')
 admin_Route.post('/login',adminController.login)
 admin_Route.post('/banner',upload.single('image'),adminController.bannerUpload)
 admin_Route.get('/banner',adminController.banners)
+admin_Route.delete('/banner',adminController.deleteBanner)
 
 module.exports = admin_Route
